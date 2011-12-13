@@ -1,0 +1,13 @@
+A/V menu: 0 56
+
+Down:     0 81
+Up:       0 80
+Right:    0 86
+Left:     0 85
+
+OK:       0 87
+
+Power (off): 0 12
+
+Vol-:     0 17
+Vol+:     0 16
