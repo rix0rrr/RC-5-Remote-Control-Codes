@@ -24,3 +24,7 @@ thought to how other people might integrate it.
 Currently, the code compiles to a command-line tool that you can call for
 either receiving (and displaying the result on standard out) or reading
 from standard in and transmitting that code.
+
+The tool works at the level of transmitted system and command numbers. An
+overview of what command corresponds to what number, you'll need to find
+some other resource.
