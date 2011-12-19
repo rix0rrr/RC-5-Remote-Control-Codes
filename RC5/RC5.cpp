@@ -5,9 +5,13 @@
 namespace po = boost::program_options;
 using namespace std;
 
+#include <fstream>
+
 #include "RC5Decoder.h"
 #include "RC5Encoder.h"
 #include "SerialPort.h"
+
+#define TOGGLE_STATE_FILE ".rc5toggle"
 
 class LinePrinter : public IWordConsumer
 {
@@ -37,6 +41,26 @@ public:
     }
 };
 
+/**
+ * Store the toggle bit of the RC5 encoder in a file
+ */
+void store_rc5_toggle_bit(RC5Encoder& encoder)
+{
+	ofstream file(TOGGLE_STATE_FILE);
+	file << encoder.ToggleBit() ? '1' : '0';
+	SetFileAttributes(TOGGLE_STATE_FILE, FILE_ATTRIBUTE_HIDDEN);
+}
+
+/**
+ * Read the stored RC5 toggle bit
+ */
+bool next_rc5_toggle_bit()
+{
+	ifstream file(TOGGLE_STATE_FILE);
+	char bit;
+	file >> bit;
+	return bit == '1';
+}
 
 /**
  * Read IR from the given port
@@ -61,14 +85,17 @@ void write_ir(string port_name, vector<string> codes)
 {
 	NullDecoder decoder;
 	SerialPort port((char*) port_name.c_str(), true, decoder);
-	RC5Encoder encoder(port);
+	RC5Encoder encoder(port, next_rc5_toggle_bit());
 
 	port.Open();
 
 	for(vector<string>::iterator it = codes.begin(); it != codes.end(); ++it) {
 		RC5Word word(*it);
 		cout << word << endl;
+
 		encoder.Transmit(word);
+
+		store_rc5_toggle_bit(encoder);
 	}
 
 	port.Close();
@@ -113,7 +140,8 @@ int _tmain(int argc, _TCHAR* argv[])
 				<< endl
 				<< "For transmission, specify a CODE in the form '0:123' where the first" << endl
 				<< "number is the system address and the second number is the command number" << endl
-				<< "(both in decimal)." << endl
+				<< "(both in decimal). Note that rc5.exe will remember the state of the toggle" << endl
+				<< "bit between invocations using a file in the current directory." << endl
 				<< endl
 				<< "(rc5.exe assumes a serial DCD device for rx and a DTR device for tx)" << endl
 				;

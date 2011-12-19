@@ -29,11 +29,13 @@ private:
 
 	void Pulse();
 public:
-	RC5Encoder(SerialPort& port);
+	RC5Encoder(SerialPort& port, bool initial_toggle_bit=false);
 	~RC5Encoder();
 
 	/**
 	 * Transmit the given code word
 	 */
 	void Transmit(RC5Word& word, int repeat=1);
+
+	bool ToggleBit() { return toggle_bit; }
 };

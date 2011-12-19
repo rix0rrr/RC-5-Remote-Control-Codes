@@ -1,8 +1,9 @@
 #include "StdAfx.h"
 #include "RC5Encoder.h"
 
-RC5Encoder::RC5Encoder(SerialPort& port)
-	: port(port), word_spacer(WORD_TIME), halfbit_spacer(HALFBIT_TIME), pulse_spacer(DUTY_CYCLE_TIME)
+RC5Encoder::RC5Encoder(SerialPort& port, bool initial_toggle_bit)
+	: port(port), toggle_bit(initial_toggle_bit), word_spacer(WORD_TIME),
+      halfbit_spacer(HALFBIT_TIME), pulse_spacer(DUTY_CYCLE_TIME)
 {
 }
 

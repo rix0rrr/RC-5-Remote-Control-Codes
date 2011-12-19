@@ -6,3 +6,4 @@ _ReSharper.*
 ipch
 
 *.opensdf
+/RC5/.rc5toggle
