@@ -1,10 +1,11 @@
 #include "StdAfx.h"
 #include "RC5Decoder.h"
+#include "time.h"
 
 RC5Decoder::RC5Decoder(IWordConsumer& consumer)
     : consumer(consumer)
 {
-    frequency = Frequency();
+    frequency = TimerFrequency();
 
     transition_interval = (__int64)(frequency * TRANSITION_INTERVAL_S);
     word_interval       = (__int64)(frequency * WORD_INTERVAL_S);
@@ -16,7 +17,7 @@ RC5Decoder::~RC5Decoder()
 
 void RC5Decoder::Transition(bool up)
 {
-    __int64 now = Counter();
+    __int64 now = TimerCounter();
 
     if (last_transition + transition_interval <= now)
     {
@@ -73,16 +74,3 @@ void RC5Decoder::WordComplete()
     consumer.WordReceived(word);
 }
 
-__int64 RC5Decoder::Frequency()
-{
-    LARGE_INTEGER f;
-    if (!QueryPerformanceFrequency(&f)) throw new Win32Exception();
-    return f.QuadPart;
-}
-
-__int64 RC5Decoder::Counter()
-{
-    LARGE_INTEGER f;
-    if (!QueryPerformanceCounter(&f)) throw new Win32Exception();
-    return f.QuadPart;
-}

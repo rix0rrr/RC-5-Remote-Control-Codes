@@ -5,8 +5,8 @@
 class Win32Exception : public std::runtime_error
 {
 public:
-    Win32Exception() : std::runtime_error( ErrorMessage( &error_code ) )
-    { };
+    Win32Exception() : std::runtime_error(ErrorMessage( &error_code ) ) { };
+    Win32Exception(std::string prefix) : std::runtime_error(prefix + ": " + ErrorMessage( &error_code ) ) { };
 
     virtual ~Win32Exception() { };
 

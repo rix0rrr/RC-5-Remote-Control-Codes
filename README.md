@@ -11,7 +11,8 @@ Currently only supports serial DCD receivers and DTR transmitters (the ones you
 solder together yourself). 
 
 Note: serial receivers probably only work on desktop machines and not using USB
-adapters.
+adapters. Receiving: voltage has wrong polarization. Transmitting: USB->serial
+IC messes up the timings and possibly not enough power through IR LED.
 
 Uses Windows-specific APIs (serial, timing) so only works on Windows.
 
@@ -28,3 +29,7 @@ from standard in and transmitting that code.
 The tool works at the level of transmitted system and command numbers. An
 overview of what command corresponds to what number, you'll need to find
 some other resource.
+
+## Compiling
+
+Compiling requires Boost (developed using 1.48.0).

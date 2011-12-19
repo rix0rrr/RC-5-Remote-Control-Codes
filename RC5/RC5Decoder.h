@@ -19,22 +19,27 @@
 
 #define FIELD_BIT 1
 
+class IRDecoder 
+{
+public:
+	IRDecoder() { }
+	virtual ~IRDecoder() { }
+	virtual void Transition(bool up) = 0;
+};
+
 /**
  * RC5 Decoder
  *
  * Works by ignoring transitions that are too close together.
  * (Fewer than 1000 usec, as defined by the RC5 protocol)
  */
-class RC5Decoder
+class RC5Decoder : public IRDecoder
 {
 private:
     __int64 frequency; 
     __int64 last_transition;
     __int64 transition_interval;
     __int64 word_interval;
-
-    __int64 Frequency();
-    __int64 Counter();
 
     IWordConsumer& consumer;
 
@@ -51,6 +56,13 @@ public:
     RC5Decoder(IWordConsumer& consumer);
     ~RC5Decoder(void);
 
-    void Transition(bool up);
+    virtual void Transition(bool up);
 };
 
+class NullDecoder : public IRDecoder 
+{
+public:
+	NullDecoder() { }
+
+	virtual void Transition(bool up) { }
+};
