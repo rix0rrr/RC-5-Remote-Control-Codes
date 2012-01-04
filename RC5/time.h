@@ -5,9 +5,26 @@
 /**
  * Return the frequency of the available timer in Hz
  */
-__int64 TimerFrequency();
+inline static __int64 TimerFrequency()
+{
+    static bool initialized = false;
+    static LARGE_INTEGER f;
+
+    if (!initialized)
+    {
+        if (!QueryPerformanceFrequency(&f)) throw Win32Exception();
+        initialized = true;
+    }
+
+    return f.QuadPart;
+}
 
 /**
  * Return the current value of the timer
  */
-__int64 TimerCounter();
+inline static __int64 TimerCounter()
+{
+    LARGE_INTEGER f;
+    if (!QueryPerformanceCounter(&f)) throw Win32Exception();
+    return f.QuadPart;
+}

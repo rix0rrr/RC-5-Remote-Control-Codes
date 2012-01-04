@@ -37,4 +37,6 @@ public:
 	 * Make the DTR output pin on the RS232 port high or low, turning the IR LED on or off
 	 */
 	void OutputPin(bool high);
+    
+    HANDLE Handle() { return handle; }
 };

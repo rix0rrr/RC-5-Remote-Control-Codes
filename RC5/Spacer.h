@@ -21,10 +21,8 @@ class Spacer
 private:
 	__int64 duration;
 	__int64 expectedEnd;
-	__int64 schedulingQuantum;
-
 public:
-	Spacer(double duration) : duration((__int64)(duration * TimerFrequency())) { }
+	Spacer(double duration) : duration((__int64)(duration * (double)TimerFrequency())), expectedEnd(0) { }
 	~Spacer() { }
 
 	void Begin()
@@ -38,7 +36,7 @@ public:
 		// Windows usually only guarantees us resolution on the 
 		// order of 10ms, so there's no way to do better.
 	
-		while (TimerCounter() <= expectedEnd) /* Nothing */; 
+		while (TimerCounter() < expectedEnd) /* Nothing */; 
 	}
 
 	void Next()
@@ -46,5 +44,13 @@ public:
 		End();
 		Begin();
 	}
+
+    void Once()
+    {
+        Begin();
+        End();
+    }
+
+    __int64 Duration() { return duration; }
 };
 

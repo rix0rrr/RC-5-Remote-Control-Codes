@@ -46,6 +46,7 @@ public:
  */
 void store_rc5_toggle_bit(RC5Encoder& encoder)
 {
+	SetFileAttributes(TOGGLE_STATE_FILE, FILE_ATTRIBUTE_NORMAL); // Can't write to hidden files, d'oh
 	ofstream file(TOGGLE_STATE_FILE);
 	file << encoder.ToggleBit() ? '1' : '0';
 	SetFileAttributes(TOGGLE_STATE_FILE, FILE_ATTRIBUTE_HIDDEN);
@@ -83,6 +84,8 @@ void read_ir(string port_name, bool fancy)
  */
 void write_ir(string port_name, vector<string> codes) 
 {
+    //if (!SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS)) throw Win32Exception();
+
 	NullDecoder decoder;
 	SerialPort port((char*) port_name.c_str(), true, decoder);
 	RC5Encoder encoder(port, next_rc5_toggle_bit());
@@ -93,7 +96,7 @@ void write_ir(string port_name, vector<string> codes)
 		RC5Word word(*it);
 		cout << word << endl;
 
-		encoder.Transmit(word);
+		encoder.Transmit(word, 3);
 
 		store_rc5_toggle_bit(encoder);
 	}

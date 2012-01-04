@@ -56,9 +56,6 @@
     <ClCompile Include="RC5Decoder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="time.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SerialPort.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
