@@ -1,35 +1,30 @@
 # Simple implementation of RC-5 remote codes
 
-This remote control standard is used by Philips TVs, and possibly other vendors
-as well.
+C#/.NET library that offers a high-level API to send RC-5 IR codes. The RC-5
+control standard is used by Philips TVs, and possibly other vendors as well.
+The library translates the codes into a sequence of pulses and spaces that will
+be transmitted using an IR transmitter LED.
 
 All information was gleaned from http://en.wikipedia.org/wiki/RC-5
 
 ## IR Device Support
 
-Currently only supports serial DCD receivers and DTR transmitters (the ones you
-solder together yourself). 
+Only supports the IguanaWorks IR transceiver (http://iguanaworks.net/). USB was
+tested, althoug the serial version should work just as well as this library simply
+uses the IguanaWorks provided IR driver and client.
 
-Note: serial receivers probably only work on desktop machines and not using USB
-adapters. Receiving: voltage has wrong polarization. Transmitting: USB->serial
-IC messes up the timings and possibly not enough power through IR LED.
+Direct support of serial transmitters (by toggling the DTR line very quickly)
+was attempted but abandoned, as it is very hard to get the frequency of
+toggling correctly (Windows is not a real-time operating system). The
+IguanaWorks module offloads the high frequency oscillation to a microcontroller
+where it belongs :).
 
-Uses Windows-specific APIs (serial, timing) so only works on Windows.
+Nothing in this software is particularly Windows-specific, so with a little
+tweaks it may work on Linux as well.
 
 ## How to use
 
-For using this repository, it helps if you're a programmer because the code
-does only what I need, user interface-wise, and I haven't given a lot of
-thought to how other people might integrate it.
+It's a simple C# library, with no dependencies, so you should be able to drop
+the library into your project without any problems.
 
-Currently, the code compiles to a command-line tool that you can call for
-either receiving (and displaying the result on standard out) or reading
-from standard in and transmitting that code.
-
-The tool works at the level of transmitted system and command numbers. An
-overview of what command corresponds to what number, you'll need to find
-some other resource.
-
-## Compiling
-
-Compiling requires Boost (developed using 1.48.0).
+The test project requires NuGet to import NUnit and Moq.
