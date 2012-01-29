@@ -5,6 +5,6 @@ _ReSharper.*
 *.suo
 *.sdf
 ipch
-
+packages
 *.opensdf
 /RC5/.rc5toggle
